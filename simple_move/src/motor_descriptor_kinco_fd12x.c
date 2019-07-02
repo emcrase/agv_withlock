@@ -8,11 +8,10 @@
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include "../include/motor_descriptor.h"
 
 #define DELAY_MS 200000
 
-int kinco_fd12x_CAN_init(char *dev) // dependencies: TX2 platform socket CAN
+int kinco_fd12x_CAN_init(const char *dev) // dependencies: TX2 platform socket CAN
 {
     int s;
     int canfd_enable = 1;

@@ -5,7 +5,8 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    md_kinco_fd12x left_wheel("can0", 1);
+    const char dev_name[8] = "can0";
+    md_kinco_fd12x left_wheel(dev_name, 1);
     float velocity;
     
     left_wheel.servo_reinit();

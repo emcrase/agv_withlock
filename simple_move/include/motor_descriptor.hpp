@@ -1,8 +1,8 @@
-using namespace motor_descriptor;
+using namespace std;
 
 #define KINCO_FD12X_SUPPORTED
 
-extern "C" int kinco_fd12x_CAN_init(char *);
+extern "C" int kinco_fd12x_CAN_init(const char *);
 extern "C" void kinco_fd12x_servo_reinit(int, char);
 extern "C" float kinco_fd12x_velocity_get(int, char);
 extern "C" void kinco_fd12x_velocity_set(int, char, char, float);
@@ -20,7 +20,7 @@ enum servo_mode {
 
 class motor_descriptor {
 public:
-    motor_descriptor(char *dev_name, char node_id)
+    motor_descriptor(const char* dev_name, char node_id)
         : node_id(node_id), mode(SERVO_MODE_VELOCITY),
           velocity(0.0), position(0.0)
     {
@@ -41,6 +41,9 @@ public:
 };
 
 class md_kinco_fd12x : public motor_descriptor {
+public:
+    md_kinco_fd12x(const char *dev_name, char node_id):motor_descriptor(dev_name, node_id) {}
+
     void servo_reinit() {
         kinco_fd12x_servo_reinit(fd, node_id);
     }
@@ -66,5 +69,6 @@ class md_kinco_fd12x : public motor_descriptor {
         
         kinco_fd12x_position_set(fd, node_id, flag, inc);
     }
-}
+};
+
 
