@@ -1,18 +1,16 @@
-#include <cstdlib>
 #include <fcntl.h>
-#include <iostream>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <unistd.h>
-#include <cerrno>
-#include <csignal>
-#include <cstdint>
-#include <cstdio>
-#include <cstring>
+#include "../include/motor_descriptor.h"
+
+#define DELAY_MS 200000
 
 int kinco_fd12x_CAN_init(char *dev) // dependencies: TX2 platform socket CAN
 {
