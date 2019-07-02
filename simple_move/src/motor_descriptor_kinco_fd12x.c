@@ -54,29 +54,30 @@ void kinco_fd12x_CAN_SDO_send(int s, char node_id, const char *p_data)
 #define SERVO_MODE_POSITION 0x01
 #define SERVO_MODE_VELOCITY 0x03
 
-void kinco_fd12x_servo_reinit(motor_descriptor *md)
+void kinco_fd12x_servo_reinit(int fd, char node_id)
 {
     char config0[8] = {0x2B, 0x40, 0x60, 0x00, 0x06, 0x00, 0x00, 0x00};
     char config1[8] = {0x2B, 0x40, 0x60, 0x00, 0x86, 0x00, 0x00, 0x00};
     char config2[8] = {0x2B, 0x40, 0x60, 0x00, 0x0F, 0x00, 0x00, 0x00};
     char config3[8] = {0x2F, 0x60, 0x60, 0x00, SERVO_MODE_VELOCITY, 0x00, 0x00, 0x00};
     
-    kinco_fd12x_CAN_SDO_send(md->fd, md->node_id, config0);
-    kinco_fd12x_CAN_SDO_send(md->fd, md->node_id, config1);
-    kinco_fd12x_CAN_SDO_send(md->fd, md->node_id, config2);
-    kinco_fd12x_CAN_SDO_send(md->fd, md->node_id, config3);
+    kinco_fd12x_CAN_SDO_send(fd, node_id, config0);
+    kinco_fd12x_CAN_SDO_send(fd, node_id, config1);
+    kinco_fd12x_CAN_SDO_send(fd, node_id, config2);
+    kinco_fd12x_CAN_SDO_send(fd, node_id, config3);
 }
 
-void kinco_fd12x_velocity_update(motor_descriptor *md)
-{}
+float kinco_fd12x_velocity_get(int fd, char node_id)
+{
+    return 0.0;
+}
 
-void kinco_fd12x_velocity_set(motor_descriptor *md, float rpm)
+void kinco_fd12x_velocity_set(int fd, char node_id, char flag, float rpm)
 {
     char sdo_str_mode[8] = {0x2F, 0x60, 0x60, 0x00, SERVO_MODE_VELOCITY, 0x00, 0x00, 0x00};
     
-    if(md->mode != SERVO_MODE_VELOCITY) {
-        kinco_fd12x_CAN_SDO_send(md->fd, md->node_id, sdo_str_mode);
-        md->mode = SERVO_MODE_VELOCITY;
+    if(flag) {
+        kinco_fd12x_CAN_SDO_send(fd, node_id, sdo_str_mode);
     }
     
     char sdo_str[8] = {0x23, 0xFF, 0x60, 0x00};
@@ -85,37 +86,15 @@ void kinco_fd12x_velocity_set(motor_descriptor *md, float rpm)
     rpm = rpm * 512.0 * 65535.0 / 1875.0;
     *p_sdo_str_vel = (int)rpm;
 
-    kinco_fd12x_CAN_SDO_send(md->fd, md->node_id, sdo_str);
+    kinco_fd12x_CAN_SDO_send(fd, node_id, sdo_str);
 }
 
-void kinco_fd12x_position_update(motor_descriptor *md)
-{}
-
-void kinco_fd12x_position_set(motor_descriptor *md, int inc)
-{}
-
-motor_descriptor* kinco_fd12x_md_create(char *dev_name, char node_id)
+int kinco_fd12x_position_get(int fd, char node_id)
 {
-    int fd;
-    
-    fd = kinco_fd12x_CAN_init(dev_name);
-    
-    motor_descriptor *md = malloc(sizeof(motor_descriptor));
-    md->fd = fd;
-    md->node_id = node_id;
-    md->mode = SERVO_MODE_VELOCITY;
-    md->velocity = 0.0;
-    md->position = 0;
-    md->servo_reinit = kinco_fd12x_servo_reinit;
-    md->velocity_update = kinco_fd12x_velocity_update;
-    md->velocity_set = kinco_fd12x_velocity_set;
-    md->position_update = kinco_fd12x_position_update;
-    md->position_set = kinco_fd12x_position_set;
-    
-    return md;
+    return 0;
 }
 
-void md_kinco_fd12x_destroy(motor_descriptor* md)
+void kinco_fd12x_position_set(int fd, char node_id, char flag, int inc)
 {}
 
 
