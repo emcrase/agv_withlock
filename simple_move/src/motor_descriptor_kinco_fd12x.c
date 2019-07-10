@@ -1,3 +1,6 @@
+// author@ likunyao
+// date@ 2019/6/28
+// description@ functions for implementation
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>

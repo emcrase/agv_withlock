@@ -1,3 +1,6 @@
+// author@ likunyao
+// date@ 2019/6/28
+// description@ simple test case
 #include <iostream>
 #include "../include/motor_descriptor.hpp"
 
